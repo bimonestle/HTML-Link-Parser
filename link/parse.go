@@ -67,6 +67,11 @@ func text(n *html.Node) string {
 		return n.Data
 	}
 
+	// This section will return the comment
+	// if n.Type == html.CommentNode {
+	// 	return n.Data
+	// }
+
 	// Otherwise, the type given is for example
 	// a comment or Doctype. Do this
 	if n.Type != html.ElementNode {
@@ -74,7 +79,7 @@ func text(n *html.Node) string {
 	}
 	var ret string
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		ret += text(c) + " "
+		ret += text(c)
 	}
 
 	// These strings package combination is to get rid
