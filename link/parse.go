@@ -3,6 +3,7 @@ package link
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"golang.org/x/net/html"
 )
@@ -75,7 +76,11 @@ func text(n *html.Node) string {
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		ret += text(c) + " "
 	}
-	return ret
+
+	// These strings package combination is to get rid
+	// of or trim the unnecessary white spaces
+	// e.g: indentation, tab etc.
+	return strings.Join(strings.Fields(ret), " ")
 }
 
 // Get every single <a> node / element
