@@ -29,13 +29,51 @@ func Parse(r io.Reader) ([]Link, error) {
 		return nil, err
 	}
 	nodes := linkNodes(doc)
+
+	// A slice of Link struct or object
+	var links []Link
+
 	for _, node := range nodes {
-		fmt.Println(node)
+		links = append(links, buildLink(node))
+
+		// fmt.Println(node)
 	}
-	// This dfs() will return every single nodes of an
+	// This dfs() below will return every single nodes of an
 	// HTML Document
 	// dfs(doc, "")
-	return nil, nil
+	return links, nil
+}
+
+// Get the href value from an HTML Document
+// and store it to the Link struct {Href string, Text string}
+func buildLink(n *html.Node) Link {
+	//
+	var ret Link
+	for _, attr := range n.Attr {
+		if attr.Key == "href" {
+			ret.Href = attr.Val
+			break
+		}
+	}
+	ret.Text = text(n)
+	return ret
+}
+
+func text(n *html.Node) string {
+	if n.Type == html.TextNode {
+		return n.Data
+	}
+
+	// Otherwise, the type given is for example
+	// a comment or Doctype. Do this
+	if n.Type != html.ElementNode {
+		return ""
+	}
+	var ret string
+	for c := n.FirstChild; c != nil; c = n.NextSibling {
+		ret += text(c) + " "
+	}
+	return ret
 }
 
 // Get every single <a> node / element
