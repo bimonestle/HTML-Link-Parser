@@ -59,6 +59,8 @@ func buildLink(n *html.Node) Link {
 	return ret
 }
 
+// Get text value inside an <a> from
+// an HTML Document. Pass it to buildLink()
 func text(n *html.Node) string {
 	if n.Type == html.TextNode {
 		return n.Data
@@ -70,7 +72,7 @@ func text(n *html.Node) string {
 		return ""
 	}
 	var ret string
-	for c := n.FirstChild; c != nil; c = n.NextSibling {
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		ret += text(c) + " "
 	}
 	return ret
